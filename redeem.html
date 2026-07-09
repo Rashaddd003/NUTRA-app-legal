@@ -25,18 +25,8 @@
     text-align: center;
   }
   .card { max-width: 360px; width: 100%; }
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(74,99,89,0.15);
-    border-top-color: var(--brand);
-    border-radius: 50%;
-    margin: 0 auto 20px;
-    animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
   h1 { font-size: 20px; margin: 0 0 8px; }
-  p { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 0 0 24px; }
+  p { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 0 0 20px; }
   .code-pill {
     display: inline-block;
     background: rgba(74,99,89,0.08);
@@ -59,22 +49,19 @@
   }
   .btn-primary { background: var(--brand); color: #fff; }
   .btn-secondary { background: #fff; color: var(--brand); border: 1px solid rgba(74,99,89,0.25); }
-  #manual { display: none; }
   .logo { font-weight: 800; letter-spacing: 1px; color: var(--brand); margin-bottom: 20px; font-size: 15px; text-transform: uppercase; }
 </style>
 </head>
 <body>
   <div class="card">
     <div class="logo">NUTRA</div>
-    <div class="spinner" id="spinner"></div>
-    <h1 id="heading">Opening NUTRA…</h1>
-    <p id="subtext">Redeeming your promo code automatically.</p>
+    <h1 id="heading">Redeem your promo code</h1>
+    <p id="subtext">Already have NUTRA? Tap "Open in NUTRA" to redeem automatically. Don't have it yet? Download it below, then come back and tap this link again to redeem your code.</p>
     <div class="code-pill" id="codePill" style="display:none;"></div>
 
-    <div id="manual">
-      <a class="btn btn-primary" id="openAppBtn" href="#">Open in NUTRA</a>
-      <a class="btn btn-secondary" id="storeBtn" href="#">Get the NUTRA App</a>
-    </div>
+    <a class="btn btn-primary" id="openAppBtn" href="#">Open in NUTRA</a>
+    <a class="btn btn-secondary" href="https://apps.apple.com/us/app/nutra-new-norm-of-nutrition/id6763406496">Download on the App Store</a>
+    <a class="btn btn-secondary" href="https://play.google.com/store/apps/details?id=com.nutraapp.app">Get it on Google Play</a>
   </div>
 
   <script>
@@ -88,9 +75,6 @@
     var code = getParam('code') || getParam('promoCode') || '';
     var appLink = 'nutraapp://?code=' + encodeURIComponent(code);
 
-    var IOS_APP_STORE_URL = 'https://apps.apple.com/us/app/nutra-new-norm-of-nutrition/id6763406496';
-    var ANDROID_PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.nutraapp.app';
-
     function isIOS() {
       return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     }
@@ -101,66 +85,25 @@
       return isIOS() || isAndroid();
     }
 
-    var storeUrl = isIOS() ? IOS_APP_STORE_URL : (isAndroid() ? ANDROID_PLAY_STORE_URL : IOS_APP_STORE_URL);
-
     document.getElementById('openAppBtn').href = appLink;
-    document.getElementById('storeBtn').href = storeUrl;
 
     if (code) {
       var pill = document.getElementById('codePill');
       pill.textContent = code.toUpperCase();
       pill.style.display = 'inline-block';
-    }
-
-    if (!code) {
-      document.getElementById('spinner').style.display = 'none';
+    } else {
       document.getElementById('heading').textContent = 'Missing promo code';
       document.getElementById('subtext').textContent = 'This link is missing a code — ask for a new one.';
-    } else if (!isMobile()) {
-      // A nutraapp:// link and a mobile App/Play Store page are both
-      // meaningless on a desktop browser — there's no app to open and
-      // nothing to install from a PC. Previously this fell through to the
-      // same mobile logic below, which waited 1.8s and then auto-redirected
-      // desktop visitors to the App Store anyway (confusing, and not
-      // actually actionable there). Just tell them to use their phone
-      // instead of bouncing them anywhere.
-      document.getElementById('spinner').style.display = 'none';
-      document.getElementById('heading').textContent = 'Open this link on your phone';
-      document.getElementById('subtext').textContent = 'This promo code can only be redeemed in the NUTRA app. Open this link on your iPhone or Android phone to continue.';
-    } else {
-      // Mobile flow: attempt the app link, then fall back to the store.
+    }
 
-      // If the app actually opens, the browser tab gets backgrounded —
-      // track that so the store auto-redirect below never fires for
-      // someone whose app just opened a little slower than our timeout.
-      var appOpened = false;
-      document.addEventListener('visibilitychange', function () {
-        if (document.hidden) appOpened = true;
-      });
-
-      // Try to open the app immediately. Note: iOS Safari frequently blocks
-      // a programmatic redirect to a custom scheme that fires without a
-      // direct user tap, so this may silently do nothing on some devices —
-      // that's exactly why both the manual "Open in NUTRA" button and the
-      // store auto-redirect below exist as fallbacks rather than relying on
-      // this alone.
+    // If NUTRA is already installed, try opening it right away so the code
+    // redeems without the user needing to tap anything. This is a single,
+    // one-shot attempt with no timer and no automatic redirect afterward —
+    // if it doesn't work (app not installed, or an in-app browser like
+    // WhatsApp's blocks custom URL schemes), the three buttons above are
+    // the actual fallback the visitor sees and controls themselves.
+    if (code && isMobile()) {
       window.location.href = appLink;
-
-      // If we're still on this page after a beat, the app isn't installed
-      // (or the automatic app-link redirect was blocked) — stop spinning,
-      // reveal the manual buttons, and auto-redirect to the correct store
-      // for this device (Play Store on Android, App Store on iOS). The
-      // manual buttons stay as a guaranteed fallback in case this redirect
-      // is also blocked by the browser.
-      setTimeout(function () {
-        if (appOpened) return;
-
-        document.getElementById('spinner').style.display = 'none';
-        document.getElementById('heading').textContent = 'Continue to NUTRA';
-        document.getElementById('subtext').textContent = 'Redirecting you to get the NUTRA app…';
-        document.getElementById('manual').style.display = 'block';
-        window.location.href = storeUrl;
-      }, 1800);
     }
   </script>
 </body>
