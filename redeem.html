@@ -97,6 +97,9 @@
     function isAndroid() {
       return /Android/.test(navigator.userAgent);
     }
+    function isMobile() {
+      return isIOS() || isAndroid();
+    }
 
     var storeUrl = isIOS() ? IOS_APP_STORE_URL : (isAndroid() ? ANDROID_PLAY_STORE_URL : IOS_APP_STORE_URL);
 
@@ -107,49 +110,58 @@
       var pill = document.getElementById('codePill');
       pill.textContent = code.toUpperCase();
       pill.style.display = 'inline-block';
-    } else {
+    }
+
+    if (!code) {
+      document.getElementById('spinner').style.display = 'none';
       document.getElementById('heading').textContent = 'Missing promo code';
       document.getElementById('subtext').textContent = 'This link is missing a code — ask for a new one.';
-    }
-
-    // If the app actually opens, the browser tab gets backgrounded — track
-    // that so the store auto-redirect below never fires for someone whose
-    // app just opened a little slower than our timeout.
-    var appOpened = false;
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) appOpened = true;
-    });
-
-    // Try to open the app immediately. Note: iOS Safari frequently blocks a
-    // programmatic redirect to a custom scheme that fires without a direct
-    // user tap, so this may silently do nothing on some devices — that's
-    // exactly why both the manual "Open in NUTRA" button and the store
-    // auto-redirect below exist as fallbacks rather than relying on this
-    // alone.
-    if (code) {
-      window.location.href = appLink;
-    }
-
-    // If we're still on this page after a beat, the app isn't installed (or
-    // the automatic app-link redirect was blocked) — stop spinning, reveal
-    // the manual buttons, and auto-redirect to the correct store for this
-    // device (Play Store on Android, App Store everywhere else). The manual
-    // buttons stay as a guaranteed fallback in case this redirect is also
-    // blocked by the browser.
-    setTimeout(function () {
-      if (appOpened) return;
-
+    } else if (!isMobile()) {
+      // A nutraapp:// link and a mobile App/Play Store page are both
+      // meaningless on a desktop browser — there's no app to open and
+      // nothing to install from a PC. Previously this fell through to the
+      // same mobile logic below, which waited 1.8s and then auto-redirected
+      // desktop visitors to the App Store anyway (confusing, and not
+      // actually actionable there). Just tell them to use their phone
+      // instead of bouncing them anywhere.
       document.getElementById('spinner').style.display = 'none';
-      document.getElementById('heading').textContent = code ? 'Continue to NUTRA' : 'Missing promo code';
-      document.getElementById('subtext').textContent = code
-        ? 'Redirecting you to get the NUTRA app…'
-        : 'This link is missing a code — ask for a new one.';
-      document.getElementById('manual').style.display = 'block';
+      document.getElementById('heading').textContent = 'Open this link on your phone';
+      document.getElementById('subtext').textContent = 'This promo code can only be redeemed in the NUTRA app. Open this link on your iPhone or Android phone to continue.';
+    } else {
+      // Mobile flow: attempt the app link, then fall back to the store.
 
-      if (code) {
+      // If the app actually opens, the browser tab gets backgrounded —
+      // track that so the store auto-redirect below never fires for
+      // someone whose app just opened a little slower than our timeout.
+      var appOpened = false;
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) appOpened = true;
+      });
+
+      // Try to open the app immediately. Note: iOS Safari frequently blocks
+      // a programmatic redirect to a custom scheme that fires without a
+      // direct user tap, so this may silently do nothing on some devices —
+      // that's exactly why both the manual "Open in NUTRA" button and the
+      // store auto-redirect below exist as fallbacks rather than relying on
+      // this alone.
+      window.location.href = appLink;
+
+      // If we're still on this page after a beat, the app isn't installed
+      // (or the automatic app-link redirect was blocked) — stop spinning,
+      // reveal the manual buttons, and auto-redirect to the correct store
+      // for this device (Play Store on Android, App Store on iOS). The
+      // manual buttons stay as a guaranteed fallback in case this redirect
+      // is also blocked by the browser.
+      setTimeout(function () {
+        if (appOpened) return;
+
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('heading').textContent = 'Continue to NUTRA';
+        document.getElementById('subtext').textContent = 'Redirecting you to get the NUTRA app…';
+        document.getElementById('manual').style.display = 'block';
         window.location.href = storeUrl;
-      }
-    }, 1800);
+      }, 1800);
+    }
   </script>
 </body>
 </html>
