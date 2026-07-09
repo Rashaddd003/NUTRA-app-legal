@@ -4,38 +4,107 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Redeem your NUTRA promo code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --brand: #4A6359;
-    --bg: #FAFAF8;
+    --brand-dark: #384D45;
+    --brand-light: #7C9A8E;
+    --accent: #C8A28E;
+    --bg: #FAF7F2;
     --ink: #1A1A1A;
     --muted: #767676;
   }
   * { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: var(--bg);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: var(--ink);
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 24px;
+    padding: 28px 20px;
     text-align: center;
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(200, 162, 142, 0.30), transparent 42%),
+      radial-gradient(circle at 88% 12%, rgba(74, 99, 89, 0.22), transparent 40%),
+      radial-gradient(circle at 90% 88%, rgba(124, 154, 142, 0.28), transparent 45%),
+      radial-gradient(circle at 8% 92%, rgba(200, 162, 142, 0.22), transparent 40%);
+    background-attachment: fixed;
   }
-  .card { max-width: 360px; width: 100%; }
-  h1 { font-size: 20px; margin: 0 0 8px; }
-  p { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 0 0 20px; }
-  .code-pill {
-    display: inline-block;
-    background: rgba(74,99,89,0.08);
+  .card {
+    max-width: 380px;
+    width: 100%;
+    background: #fff;
+    border-radius: 28px;
+    padding: 36px 30px 30px;
+    box-shadow: 0 20px 60px -12px rgba(56, 77, 69, 0.25), 0 4px 16px rgba(56, 77, 69, 0.08);
+    border: 1px solid rgba(74, 99, 89, 0.08);
+  }
+  .badge {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 18px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px -6px rgba(56, 77, 69, 0.35);
+  }
+  .badge img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  .wordmark {
+    font-weight: 800;
+    letter-spacing: 2px;
     color: var(--brand);
+    margin-bottom: 14px;
+    font-size: 13px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: 23px;
+    font-weight: 800;
+    margin: 0 0 10px;
+    letter-spacing: -0.3px;
+  }
+  p {
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin: 0 0 22px;
+    font-weight: 500;
+  }
+  .ticket {
+    position: relative;
+    margin: 0 auto 26px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 26px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(74,99,89,0.08), rgba(200,162,142,0.12));
+    border: 1.5px dashed rgba(74, 99, 89, 0.35);
+  }
+  .ticket-label {
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 1px;
-    padding: 6px 14px;
-    border-radius: 999px;
-    margin-bottom: 20px;
+    letter-spacing: 1.5px;
+    color: var(--brand-light);
+    text-transform: uppercase;
+  }
+  .ticket-code {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--brand-dark);
   }
   .btn {
     display: flex;
@@ -43,27 +112,77 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
-    padding: 14px;
-    border-radius: 12px;
+    padding: 15px;
+    border-radius: 14px;
     font-weight: 700;
     font-size: 15px;
+    font-family: inherit;
     text-decoration: none;
     margin-bottom: 12px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
+  .btn:active { transform: scale(0.98); }
   .btn svg { flex-shrink: 0; }
-  .btn-primary { background: var(--brand); color: #fff; }
-  .btn-secondary { background: #fff; color: var(--brand); border: 1px solid rgba(74,99,89,0.25); }
-  .logo { font-weight: 800; letter-spacing: 1px; color: var(--brand); margin-bottom: 20px; font-size: 15px; text-transform: uppercase; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--brand-light), var(--brand-dark));
+    color: #fff;
+    box-shadow: 0 10px 22px -8px rgba(56, 77, 69, 0.55);
+  }
+  .btn-secondary {
+    background: #fff;
+    color: var(--brand-dark);
+    border: 1.5px solid rgba(74, 99, 89, 0.18);
+  }
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 14px;
+    color: var(--muted);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(74, 99, 89, 0.15);
+  }
+  .footer {
+    margin-top: 22px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .footer a {
+    color: var(--brand);
+    font-weight: 700;
+    text-decoration: none;
+  }
 </style>
 </head>
 <body>
   <div class="card">
-    <div class="logo">NUTRA</div>
+    <div class="badge">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAABCcAAAQnAEmzTo0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAP+SURBVHgB1ZrPTxNBFMff21aspJKFEAMVTXvTSCIe5WK9oRfBg8YTJdEzP/wDhD+AX2ejlCPGKDe9ES54tCYmHrsJSevBSK0NVGxnnLdYs7Q77ezuIO3n4jq73b7v+zEzzCuCAlnOzUgJRjjCPQ48iRzigGCCTjgUxDszAJgBBtuxHtxU+Rg2u2kbvg/TnPEZ7Qa3xkLENBiwPngOLdlDUgFf9/k0q/L5UzC8HosBWxiKhtNuN10F5Ep8WcR0BtoKXIlFcbZhtH4gX+JrIs9T0IYIu9IXo6Ep55jh/A95vl2NJxAwdZQdzrG/CM+nhPFr0BHw2Vg0tEJXtoD8AY/zKt8Sl3HoDAq/fmMi0YuFoxRiMAmdYzxhdoWZPcnYEciVWBY6SwBhRyGcK1bG4QSM392rwG6hYl8PD3ZBT8QAzZiRMIyEGWJS96ufvfsOzz8Uj409udkDC3f6QCdVYOOGgXgdNLLxsdRgPEFjbuNBELbfIuePgCYoZZa2CtL7i+JescxAI3ESoG2v80p4v5b3bpDxmqNgakt/MnyxifdrkACdUdAmQMV4goxXfVYFLQLI+5Q+qlAUaJrVgRYBfjw6+/Yb6CCwAK/er7FjlWEnW4agBBYw+0buyZePLsDyRL/0/pKGWggkgDxInnTj6W0Txq52w8MbUXsVdv28higEEiDL40tm2BZQg65pzI2gUfAtYKPJolW/56GNnCyVgkbBtwCZ5yhlKHXqGU1EYOxKt6d3qeBLgMz7lCZzSfnOZOV+v+u2mqLgZyYjfAmQeczO9d6w9HNkvLM2nPhdnT0LaOb9ByJ9WkEz0mg80jDudz3xLEDm/ddTA6DKXJMoeN3oeRIg8z4VbrPUqYcK2m1toHd73W57EuDm/VaFK4Nqwa2gvW63lQXIvN+qcGXICtrrHz3KAmTeVylcGZRGwwNdDeNeoqAk4P2XfVfv02YtKPMuJxVkPH2nCiSg5QTslqtUuNcGuyAoshV6yFRKS/to0Wr1FH2JczPmt3BlLNztO+Ykej99pwIZg3G+rfLkC5EuNRGPRe76KVwZzt0rCVFdU4TtnzD/kyc52ifTLaHc/HHAtBrv5HP+EC6LdysfQyJOYHaPm2fPcDrcPe1emFesWNRIGHTGzjlfhQ5D2LxO/9qxOqwY1O3Qd1hz8lhG2EjThS2AoiA0LUCHQG3XWu/4X7VQz4l1QCqRjc6ecUObNVesiu44TkI7wvh6rCeUcg41zFf0QDtGgmyqN55wnXCHzodmRE+WGsoWnDb0IxDRViWb3G43/bEHtV9ZhaUQ8f93MYXhom+9ehg1VhKI0hkSQZFckY8zZEm7JcVFV+dkfm5j0dYmBMZmOQqZZobX+AN3xr1nX6IyBgAAAABJRU5ErkJggg==" alt="NUTRA" />
+    </div>
+    <div class="wordmark">NUTRA</div>
     <h1 id="heading">Redeem your promo code</h1>
-    <p id="subtext">Already have NUTRA? Tap "Open in NUTRA" to redeem automatically. Don't have it yet? Download it below, then come back and tap this link again to redeem your code.</p>
-    <div class="code-pill" id="codePill" style="display:none;"></div>
+    <p id="subtext">Already have NUTRA? Tap below to redeem automatically. Don't have it yet? Download it, then come back and tap this link again.</p>
 
-    <a class="btn btn-primary" id="openAppBtn" href="#">Open in NUTRA</a>
+    <div class="ticket" id="ticket" style="display:none;">
+      <div class="ticket-label">Your code</div>
+      <div class="ticket-code" id="codePill"></div>
+    </div>
+
+    <a class="btn btn-primary" id="openAppBtn" href="#">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+      Open in NUTRA
+    </a>
+
+    <div class="divider">Don't have the app yet?</div>
+
     <a class="btn btn-secondary" href="https://apps.apple.com/us/app/nutra-new-norm-of-nutrition/id6763406496">
       <svg width="18" height="18" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
       Download on the App Store
@@ -72,6 +191,8 @@
       <svg width="18" height="18" viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
       Get it on Google Play
     </a>
+
+    <div class="footer">Trouble redeeming? <a href="https://rashaddd003.github.io/NUTRA-app-legal/#support">Contact support</a></div>
   </div>
 
   <script>
@@ -98,9 +219,8 @@
     document.getElementById('openAppBtn').href = appLink;
 
     if (code) {
-      var pill = document.getElementById('codePill');
-      pill.textContent = code.toUpperCase();
-      pill.style.display = 'inline-block';
+      document.getElementById('codePill').textContent = code.toUpperCase();
+      document.getElementById('ticket').style.display = 'inline-flex';
     } else {
       document.getElementById('heading').textContent = 'Missing promo code';
       document.getElementById('subtext').textContent = 'This link is missing a code — ask for a new one.';
@@ -110,8 +230,8 @@
     // redeems without the user needing to tap anything. This is a single,
     // one-shot attempt with no timer and no automatic redirect afterward —
     // if it doesn't work (app not installed, or an in-app browser like
-    // WhatsApp's blocks custom URL schemes), the three buttons above are
-    // the actual fallback the visitor sees and controls themselves.
+    // WhatsApp's blocks custom URL schemes), the buttons above are the
+    // actual fallback the visitor sees and controls themselves.
     if (code && isMobile()) {
       window.location.href = appLink;
     }
