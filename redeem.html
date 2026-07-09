@@ -112,25 +112,43 @@
       document.getElementById('subtext').textContent = 'This link is missing a code — ask for a new one.';
     }
 
+    // If the app actually opens, the browser tab gets backgrounded — track
+    // that so the store auto-redirect below never fires for someone whose
+    // app just opened a little slower than our timeout.
+    var appOpened = false;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) appOpened = true;
+    });
+
     // Try to open the app immediately. Note: iOS Safari frequently blocks a
     // programmatic redirect to a custom scheme that fires without a direct
     // user tap, so this may silently do nothing on some devices — that's
-    // exactly why the manual "Open in NUTRA" button below exists as a
-    // guaranteed fallback rather than relying on this alone.
+    // exactly why both the manual "Open in NUTRA" button and the store
+    // auto-redirect below exist as fallbacks rather than relying on this
+    // alone.
     if (code) {
       window.location.href = appLink;
     }
 
-    // If we're still on this page after a beat, either the app isn't
-    // installed or the automatic redirect was blocked — stop spinning and
-    // show the manual buttons instead of hanging forever.
+    // If we're still on this page after a beat, the app isn't installed (or
+    // the automatic app-link redirect was blocked) — stop spinning, reveal
+    // the manual buttons, and auto-redirect to the correct store for this
+    // device (Play Store on Android, App Store everywhere else). The manual
+    // buttons stay as a guaranteed fallback in case this redirect is also
+    // blocked by the browser.
     setTimeout(function () {
+      if (appOpened) return;
+
       document.getElementById('spinner').style.display = 'none';
       document.getElementById('heading').textContent = code ? 'Continue to NUTRA' : 'Missing promo code';
       document.getElementById('subtext').textContent = code
-        ? 'Tap below to open the app and redeem your code.'
+        ? 'Redirecting you to get the NUTRA app…'
         : 'This link is missing a code — ask for a new one.';
       document.getElementById('manual').style.display = 'block';
+
+      if (code) {
+        window.location.href = storeUrl;
+      }
     }, 1800);
   </script>
 </body>
